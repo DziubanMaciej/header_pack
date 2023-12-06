@@ -1,4 +1,5 @@
 #include <cstdarg>
+#include <cstring>
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
@@ -26,7 +27,7 @@ Options:
     char buffer[4096];
     va_list args;
     va_start(args, format);
-    vsprintf(buffer, format, args);
+    vsnprintf(buffer, sizeof(buffer), format, args);
     va_end(args);
 
     printf("ERROR: %s\n", buffer);
@@ -111,7 +112,7 @@ int main(const int argc, const char **argv) {
     // Open output file
     std::ofstream outputStream(outputFile, std::ios::out);
     if (!outputStream) {
-        printErrorAndExit(false , "Could not open output file %s", outputFile.c_str());
+        printErrorAndExit(false, "Could not open output file %s", outputFile.c_str());
     }
 
     // Execute text mode
@@ -128,7 +129,7 @@ int main(const int argc, const char **argv) {
             } else if (inputStream.eof()) {
                 outputStream.write(chunk, inputStream.gcount());
             } else {
-                printErrorAndExit(false, "Failed reading input file %s", inputFile);
+                printErrorAndExit(false, "Failed reading input file %s", inputFile.c_str());
             }
         }
 
@@ -153,7 +154,7 @@ int main(const int argc, const char **argv) {
             } else if (inputStream.eof()) {
                 bytesToWrite = inputStream.gcount();
             } else {
-                printErrorAndExit(false, "Failed reading input file %s", inputFile);
+                printErrorAndExit(false, "Failed reading input file %s", inputFile.c_str());
             }
 
             for (size_t byteIndex = 0; byteIndex < bytesToWrite; byteIndex++) {

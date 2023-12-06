@@ -2,6 +2,10 @@ project(header_pack)
 cmake_minimum_required(VERSION 3.10)
 add_executable(header_pack header_pack.cpp)
 target_compile_features(header_pack PRIVATE cxx_std_17)
+target_compile_options(header_pack PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:/W4>
+    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
+)
 
 function (header_pack_generate TARGET INPUT_FILE_NAME OUTPUT_FILE_NAME MODE_ARG VARIABLE_NAME HEX_VALUES_PER_LINE)
     set(INPUT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${INPUT_FILE_NAME}")
