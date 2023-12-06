@@ -100,7 +100,7 @@ int main(const int argc, const char **argv) {
     const Options options = parseOptions(argIndex, argc, argv);
 
     // Open input file
-    int inputOpenMode = std::ios::in;
+    std::ios_base::openmode inputOpenMode = std::ios::in;
     if (options.mode == Options::Mode::Binary) {
         inputOpenMode |= std::ios::binary;
     }
