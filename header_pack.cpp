@@ -117,23 +117,35 @@ int main(const int argc, const char **argv) {
 
     // Execute text mode
     if (options.mode == Options::Mode::Text) {
-        outputStream << "#pragma once\n\n";
-        outputStream << "const char *" << options.variableName << " = R\"DELIMETER(";
+        const char *stringBegin = "R\"DELIMETER(";
+        const char *stringEnd = ")DELIMETER\"";
 
+        outputStream << "#pragma once\n\n";
+        outputStream << "const char *" << options.variableName << " = " << stringBegin;
+
+        constexpr size_t maxStringLength = 16384;
         constexpr size_t chunkSize = 4096;
+        size_t currentStringLength = 0;
         char chunk[chunkSize];
         while (inputStream) {
             inputStream.read(chunk, chunkSize);
-            if (inputStream.good()) {
-                outputStream.write(chunk, chunkSize);
-            } else if (inputStream.eof()) {
-                outputStream.write(chunk, inputStream.gcount());
-            } else {
+            size_t bytesToWrite = chunkSize;
+            if (inputStream.eof()) {
+                bytesToWrite = inputStream.gcount();
+            } else if (!inputStream.good()) {
                 printErrorAndExit(false, "Failed reading input file %s", inputFile.c_str());
             }
+
+            if (currentStringLength + bytesToWrite > maxStringLength) {
+                outputStream << stringEnd << ' ' << stringBegin;
+                currentStringLength = 0;
+            }
+
+            outputStream.write(chunk, bytesToWrite);
+            currentStringLength += bytesToWrite;
         }
 
-        outputStream << ")DELIMETER\";\n";
+        outputStream << stringEnd << ";\n";
         outputStream.close();
         exit(0);
     }
