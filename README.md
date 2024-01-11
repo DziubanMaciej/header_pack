@@ -1,9 +1,9 @@
 # header_pack
 
-This is a tool useful for embeding resource files inside your C++ application's binary.
+This is a tool useful for embedding resource files inside your C++ application's binary.
 
 ### Overview of the problem
-For most applications it is often neccessary to use some kind of data, that is not stored as code. Things like shaders, textures, fonts, csv, sounds, etc. The usual approach to this is distributing the data alongside application's binary as files. Although, when the amount of data is small, it makes sense to bake it inside the executable to reduce the potential problems, like resolving paths, handling bad formats, permissions, deleted files, etc.
+For most applications it is often necessary to use some kind of data, that is not stored as code. Things like shaders, textures, fonts, csv, sounds, etc. The usual approach to this is distributing the data alongside application's binary as files. Although, when the amount of data is small, it makes sense to bake it inside the executable to reduce the potential problems, like resolving paths, handling bad formats, permissions, deleted files, etc.
 
 There exist some ways to achieve this: [Windows resources](https://learn.microsoft.com/en-us/windows/win32/menurc/resources-overviews), [Linux objcopy](https://sourceware.org/binutils/docs/binutils/objcopy.html), [Assembly](https://stackoverflow.com/a/10692876/4259190). They are, however, all environment specific, making them hard to use in cross-platform applications.
 
@@ -37,7 +37,7 @@ $ ./header_pack.exe input output.txt -b
 $ cat output.txt
 #pragma once
 
-const char var[] = {
+const unsigned char var[] = {
     0x61, 0x0a, 0x62, 0x0a, 0x63, 0x0a,
 };
 ```

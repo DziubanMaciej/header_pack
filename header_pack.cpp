@@ -153,7 +153,7 @@ int main(const int argc, const char **argv) {
     // Execute binary mode
     if (options.mode == Options::Mode::Binary) {
         outputStream << "#pragma once\n\n";
-        outputStream << "const char " << options.variableName << "[] = {\n";
+        outputStream << "const unsigned char " << options.variableName << "[] = {\n";
 
         constexpr size_t chunkSize = 4096;
         char chunk[chunkSize];
@@ -180,7 +180,7 @@ int main(const int argc, const char **argv) {
                     << std::setfill('0')
                     << std::setw(2)
                     << std::hex
-                    << static_cast<unsigned int>(chunk[byteIndex])
+                    << static_cast<unsigned int>(static_cast<unsigned char>(chunk[byteIndex]))
                     << ',';
 
                 const bool breakLine = bytesInCurrentLine == options.hexValuesPerLine - 1 || byteIndex == bytesToWrite - 1;
