@@ -7,7 +7,7 @@ target_compile_options(header_pack PRIVATE
     $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
 )
 
-function (header_pack_generate TARGET INPUT_FILE_NAME OUTPUT_FILE_NAME MODE)
+function (header_pack_generate MODE TARGET INPUT_FILE_NAME OUTPUT_FILE_NAME)
     # Parse optional arguments
     set(OPTION_ARGS)
     set(VALUE_ARGS VARIABLE VALUES_PER_LINE INPUT_SOURCE_GROUP OUTPUT_SOURCE_GROUP)
