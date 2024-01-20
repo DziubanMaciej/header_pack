@@ -43,10 +43,25 @@ const unsigned char var[] = {
 ```
 
 ### CMake integration
-To make it easy to generate files during build time in CMake projects, header_pack provides convenience CMake functions that do the following:
-- create a [custom command](https://cmake.org/cmake/help/latest/command/add_custom_command.html) that will generate the file in build directory,
-- add generated file to your [target's](https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#binary-targets) [sources list](https://cmake.org/cmake/help/latest/prop_tgt/SOURCES.html) to create a dependency on the custom command,
-- add a directory with generated file to your target's [include directories](https://cmake.org/cmake/help/latest/prop_tgt/INCLUDE_DIRECTORIES.html) to allow C++ code include it like `#include <generated/file_name.h>`.
+To make it easy to generate files during build time in CMake projects, *header_pack* provides a convenience CMake function. Syntax of the function:
+```
+header_pack_generate(<TEXT | BINARY>
+                     <input_file_name>
+                     <output_file_name>
+                     <target>
+                     [VARIABLE <variable>]
+                     [VALUES_PER_LINE <values_per_line>]
+                     [INPUT_SOURCE_GROUP <input_source_group>
+                     [OUTPUT_SOURCE_GROUP <output_source_group>)
+```
+
+The function creates a [custom command](https://cmake.org/cmake/help/latest/command/add_custom_command.html) that will generate a file named `<output_file_name>` out of `<input_file_name>` inside the build directory. This file is then added to [sources list](https://cmake.org/cmake/help/latest/prop_tgt/SOURCES.html) of `<target>`. Due to the way CMake handles custom commands, this function has to be called in the same directory that the target was created.
+
+If `<variable>` is specified, it selects C++ variable name in the generated file. Default is "variable".
+
+If `<values_per_line>` is specified, it selects the number of bytes per line in `BINARY` mode. Ignored in other modes. Default is 16.
+
+Options `<input_source_group>` and/or `<output_source_group>` are forwarded to [source_group](https://cmake.org/cmake/help/latest/command/source_group.html) CMake call for input and output files respectively. This is only a convenience option for IDEs like Visual Studio and doesn't affect the resulting program.
 
 Example:
 
@@ -57,8 +72,8 @@ cmake_minimum_required(VERSION 3.10)
 add_subdirectory(header_pack)
 
 add_executable(MyExe main.cpp)
-header_pack_generate_from_text(MyExe vertex_shader.glsl vertex_shader.h shader)
-header_pack_generate_from_binary(MyExe texture.png texture.h texture)
+header_pack_generate(TEXT MyExe vertex_shader.glsl vertex_shader.h VARIABLE shader)
+header_pack_generate(BINARY MyExe texture.png texture.h VARIABLE texture)
 ```
 
 **main.cpp**
