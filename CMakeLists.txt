@@ -10,7 +10,7 @@ target_compile_options(header_pack PRIVATE
 function (header_pack_generate TARGET INPUT_FILE_NAME OUTPUT_FILE_NAME MODE)
     # Parse optional arguments
     set(OPTION_ARGS)
-    set(VALUE_ARGS VARIABLE VALUES_PER_LINE)
+    set(VALUE_ARGS VARIABLE VALUES_PER_LINE INPUT_SOURCE_GROUP OUTPUT_SOURCE_GROUP)
     set(MULTI_VALUE_ARGS)
     cmake_parse_arguments(ARG "${OPTION_ARGS}" "${VALUE_ARGS}" "${MULTI_VALUE_ARGS}" ${ARGN})
 
@@ -56,4 +56,12 @@ function (header_pack_generate TARGET INPUT_FILE_NAME OUTPUT_FILE_NAME MODE)
 
     # Since this is a header file, we setup an include directory.
     target_include_directories(${TARGET} PRIVATE "${GENERATE_DIR_ROOT}")
+
+    # Optionally setup source group for generated file and or input file. IDEs like Visual Studio may visualize it.
+    if (NOT "$(ARG_INPUT_SOURCE_GROUP}d" STREQUAL "d")
+        source_group("${ARG_INPUT_SOURCE_GROUP}" FILES "${INPUT_PATH}")
+    endif()
+    if (NOT "$(ARG_OUTPUT_SOURCE_GROUP}d" STREQUAL "d")
+        source_group("${ARG_OUTPUT_SOURCE_GROUP}" FILES "${OUTPUT_PATH}")
+    endif()
 endfunction()
