@@ -1,11 +1,19 @@
-project(header_pack)
 cmake_minimum_required(VERSION 3.12)
+project(header_pack)
+
+set(HEADER_PACK_BUILD_TESTS OFF CACHE BOOL "If enabled, tests for header_pack will be built.")
+
 add_executable(header_pack header_pack.cpp)
 target_compile_features(header_pack PRIVATE cxx_std_17)
 target_compile_options(header_pack PRIVATE
     $<$<CXX_COMPILER_ID:MSVC>:/W4>
     $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
 )
+
+if (HEADER_PACK_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
 
 function (header_pack_generate MODE TARGET INPUT_FILE_NAME OUTPUT_FILE_NAME)
     # Parse optional arguments
