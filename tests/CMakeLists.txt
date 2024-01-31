@@ -21,4 +21,5 @@ function (define_header_pack_test TEST_NAME)
 endfunction()
 
 define_header_pack_test(test-text-cpp)
+define_header_pack_test(test-text-cpp-big)
 define_header_pack_test(test-binary)
