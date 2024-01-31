@@ -1,1 +1,1 @@
-input output -b
+input output.h -b
